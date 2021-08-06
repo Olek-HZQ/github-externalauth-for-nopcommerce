@@ -1,0 +1,11 @@
+﻿{
+  "Group": "ExternalAuth methods",
+  "FriendlyName": "GitHub authentication",
+  "SystemName": "ExternalAuth.GitHub",
+  "Version": "1.25",
+  "SupportedVersions": [ "4.30" ],
+  "Author": "Huang ZhongQiu",
+  "DisplayOrder": 5,
+  "FileName": "Nop.Plugin.ExternalAuth.GitHub.dll",
+  "Description": "This plugin enables GitHub authentication (login using GitHub account)"
+}

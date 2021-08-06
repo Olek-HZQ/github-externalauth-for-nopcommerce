@@ -1,0 +1,7 @@
+﻿.github-btn {
+    display: inline-block;
+    width: 172px;
+    height: 34px;
+    background-image: url('images/github_logo.jpg');
+    background-repeat: no-repeat;
+}
