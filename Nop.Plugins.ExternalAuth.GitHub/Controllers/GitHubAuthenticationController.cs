@@ -66,9 +66,9 @@ namespace Nop.Plugin.ExternalAuth.GitHub.Controllers
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
 
             var model = new ConfigurationModel
@@ -84,32 +84,32 @@ namespace Nop.Plugin.ExternalAuth.GitHub.Controllers
         [AutoValidateAntiforgeryToken]
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
 
             if (!ModelState.IsValid)
-                return Configure();
+                return await Configure();
 
             //save settings
             _gitHubExternalAuthSettings.ClientKeyIdentifier = model.ClientId;
             _gitHubExternalAuthSettings.ClientSecret = model.ClientSecret;
-            _settingService.SaveSetting(_gitHubExternalAuthSettings);
+            await _settingService.SaveSettingAsync(_gitHubExternalAuthSettings);
 
             //clear GitHub authentication options cache
             _optionsCache.TryRemove(GitHubDefaults.AuthenticationScheme);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
 
-            return Configure();
+            return await Configure();
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        public IActionResult Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            var methodIsAvailable = _authenticationPluginManager
-                .IsPluginActive(GitHubAuthenticationDefaults.SystemName, _workContext.CurrentCustomer, (_storeContext.CurrentStore).Id);
+            var methodIsAvailable = await _authenticationPluginManager
+                .IsPluginActiveAsync(GitHubAuthenticationDefaults.SystemName, await _workContext.GetCurrentCustomerAsync(), (await _storeContext.GetCurrentStoreAsync()).Id);
             if (!methodIsAvailable)
                 throw new NopException("GitHub authentication module cannot be loaded");
 
@@ -149,7 +149,7 @@ namespace Nop.Plugin.ExternalAuth.GitHub.Controllers
             };
 
             //authenticate Nop user
-            return _externalAuthenticationService.Authenticate(authenticationParameters, returnUrl);
+            return await _externalAuthenticationService.AuthenticateAsync(authenticationParameters, returnUrl);
         }
 
         #endregion

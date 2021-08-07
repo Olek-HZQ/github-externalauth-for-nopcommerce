@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Services.Authentication.External;
 using Nop.Services.Configuration;
@@ -56,13 +57,13 @@ namespace Nop.Plugin.ExternalAuth.GitHub
         /// Install the plugin
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public override void Install()
+        public override async Task InstallAsync()
         {
             //settings
-            _settingService.SaveSetting(new GitHubExternalAuthSettings());
+            await _settingService.SaveSettingAsync(new GitHubExternalAuthSettings());
 
             //locales
-            _localizationService.AddPluginLocaleResource(new Dictionary<string, string>
+            await _localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
             {
                 ["Plugins.ExternalAuth.GitHub.ClientKeyIdentifier"] = "client_id",
                 ["Plugins.ExternalAuth.GitHub.ClientKeyIdentifier.Hint"] = "Required. The client ID you received from GitHub for your OAuth App.",
@@ -71,22 +72,22 @@ namespace Nop.Plugin.ExternalAuth.GitHub
                 ["Plugins.ExternalAuth.GitHub.Instructions"] = "<p>To configure authentication with GitHub, please follow these steps:<br/><br/><ol><li>Navigate to the <a href=\"https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps\" target =\"_blank\" > GitHub Docs</a> page and sign in.</li></ol><br/><br/></p>"
             });
 
-            base.Install();
+            await base.InstallAsync();
         }
 
         /// <summary>
         /// Uninstall the plugin
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public override void Uninstall()
+        public override async Task UninstallAsync()
         {
             //settings
-            _settingService.DeleteSetting<GitHubExternalAuthSettings>();
+            await _settingService.DeleteSettingAsync<GitHubExternalAuthSettings>();
 
             //locales
-            _localizationService.DeletePluginLocaleResources("Plugins.ExternalAuth.GitHub");
+            await _localizationService.DeleteLocaleResourceAsync("Plugins.ExternalAuth.GitHub");
 
-            base.Uninstall();
+            await base.UninstallAsync();
         }
 
         #endregion

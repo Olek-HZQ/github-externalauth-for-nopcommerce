@@ -3,7 +3,7 @@
   "FriendlyName": "GitHub authentication",
   "SystemName": "ExternalAuth.GitHub",
   "Version": "1.25",
-  "SupportedVersions": [ "4.30" ],
+  "SupportedVersions": [ "4.40" ],
   "Author": "Huang ZhongQiu",
   "DisplayOrder": 5,
   "FileName": "Nop.Plugin.ExternalAuth.GitHub.dll",

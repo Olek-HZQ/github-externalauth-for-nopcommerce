@@ -6,7 +6,7 @@ namespace Nop.Plugin.ExternalAuth.GitHub.Models
     /// <summary>
     /// Represents plugin configuration model
     /// </summary>
-    public class ConfigurationModel : BaseNopModel
+    public record ConfigurationModel : BaseNopModel
     {
         [NopResourceDisplayName("Plugins.ExternalAuth.GitHub.ClientKeyIdentifier")]
         public string ClientId { get; set; }

@@ -8,9 +8,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Nop.Core.Infrastructure;
-using ILogger = Nop.Services.Logging.ILogger;
 
 namespace Nop.Plugin.ExternalAuth.GitHub.GitHubAuthentication
 {
@@ -27,8 +24,6 @@ namespace Nop.Plugin.ExternalAuth.GitHub.GitHubAuthentication
             : base(options, logger, encoder, clock)
         { }
 
-        protected virtual ILogger NopLogger => EngineContext.Current.Resolve<ILogger>();
-
         /// <inheritdoc />
         protected override async Task<AuthenticationTicket> CreateTicketAsync(ClaimsIdentity identity, AuthenticationProperties properties, OAuthTokenResponse tokens)
         {
@@ -41,7 +36,6 @@ namespace Nop.Plugin.ExternalAuth.GitHub.GitHubAuthentication
             }
 
             string responseStr = await response.Content.ReadAsStringAsync();
-            NopLogger.Information($"GitHub get user info: {JsonConvert.SerializeObject(responseStr)}");
 
             using (var payload = JsonDocument.Parse(responseStr))
             {

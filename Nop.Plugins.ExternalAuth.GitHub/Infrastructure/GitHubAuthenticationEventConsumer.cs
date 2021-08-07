@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 using Nop.Services.Authentication.External;
 using Nop.Services.Common;
@@ -33,7 +34,7 @@ namespace Nop.Plugin.ExternalAuth.GitHub.Infrastructure
         /// Handle event
         /// </summary>
         /// <param name="eventMessage">Event message</param>
-        public void HandleEvent(CustomerAutoRegisteredByExternalMethodEvent eventMessage)
+        public async Task HandleEventAsync(CustomerAutoRegisteredByExternalMethodEvent eventMessage)
         {
             if (eventMessage?.Customer == null || eventMessage.AuthenticationParameters == null)
                 return;
@@ -45,7 +46,7 @@ namespace Nop.Plugin.ExternalAuth.GitHub.Infrastructure
             //store some of the customer fields
             var name = eventMessage.AuthenticationParameters.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
             if (!string.IsNullOrEmpty(name))
-                _genericAttributeService.SaveAttribute(eventMessage.Customer, NopCustomerDefaults.FirstNameAttribute, name);
+                await _genericAttributeService.SaveAttributeAsync(eventMessage.Customer, NopCustomerDefaults.FirstNameAttribute, name);
         }
 
         #endregion
